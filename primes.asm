@@ -1,20 +1,14 @@
 # Sieve of Eratosthenes: finds all prime numbers less than n
 
 .data # Define variables
-        isPrime: .space 400 # Allocate 400 bytes
+        isPrime: .space 4000 # Allocate bytes
         prompt: .asciiz "Input number to stop calculating primes at (Enter to continue): "
-        prompt_root: .asciiz "Input root of n rounded down (Enter to continue): "
         resp: .asciiz "Will calculate all primes up to "
-        rootresp: .asciiz "Using as root the number "
         too_small: .asciiz "The number you entered was too small."
         too_large: .asciiz "The number you entered was too large."
         newline: .asciiz "\n"
         smallest: .word 2 # Smallest allowed n value
         largest: .word 1000 # Largest allowed n value
-        
-        # Square roots are set manually until sqrt function is written
-        smallest_root: .word 1 # Smallest allowed root(n) value
-        largest_root: .word 100 # Largest allowed root(n) value
 .text
 .globl main
 
@@ -51,6 +45,11 @@ main:
                 
         continue2:
         
+                # Calculate sqrt(n) result
+                move $a0, $s0
+                jal isqrt # v0 = sqrt(n)
+                move $s1, $v0
+        
                 # Print response to user
                 la $a0, resp
                 li $v0, 4
@@ -65,56 +64,7 @@ main:
                 la $a0, newline
                 li $v0, 4
                 syscall
-
-        user_prompt_rootn:
-        
-                # This will be removed in future versions where a root function is implemented
-                # Ask user for root(n) value
-                la $a0, prompt_root
-                li $v0, 4
-                syscall
-        
-                # Get root(n) value
-                li $v0, 5
-                syscall # root(n) value is now in register $v0
-        
-                move $s1, $v0 # Save root(n) value into register $s1
                 
-                # Load smallest and largest root(n) values to registers
-                lw $t0, smallest_root
-                lw $t1, largest_root
-        
-                # Error checking n values
-                # Check that root(n) value is not too small
-                bge $s1, $t0, continue3
-                jal user_prompt_small
-                j user_prompt_rootn
-                
-        continue3:
-                
-                # Check that root(n) value is not too large
-                ble $s1, $t1, continue4
-                jal user_prompt_large
-                j user_prompt_rootn
-                
-        continue4:
-                
-                # Print response to user
-                la $a0, rootresp
-                li $v0, 4
-                syscall
-        
-                # Print out user input number root(n)
-                move $a0, $s1
-                li $v0, 1
-                syscall
-        
-                # Print new line
-                la $a0, newline
-                li $v0, 4
-                syscall
-                
-                # Initialize isPrime array to 1's
                 la $t0, isPrime # Beginning address of array
                 li $t1, 1 # Constant number 1
                 
@@ -122,6 +72,8 @@ main:
                 sll $t2, $s0, 2
                 
                 add $t2, $t0, $t2 # Base address + offset
+                
+                # Initialize isPrime array to 1's
                 initializeArray:
                         bge $t0, $t2, exitInit
                         sw $t1, 0($t0) # Save 1 to memory address at $t0
@@ -140,13 +92,13 @@ main:
                 # LOOP INSTRUCTIONS IN HERE
                 lw $t2, 0($t0) # Contains data inside array memory location
                 
-                bne $t2, 1, continue5 # If the number is prime (1), then execute inner loop
+                bne $t2, 1, continue3 # If the number is prime (1), then execute inner loop
                 
                 move $t3, $t1 # Copy increment value to $t3 register
                 add $t3, $t3, $t1 # Start at 2 * $t3
                 
                 innerloop: # Loop through 2i, 3i, 4i, ..., not exceeding n
-                        bgt $t3, $s0, continue5
+                        bgt $t3, $s0, continue3
                         
                         # LOOP INSTRUCTIONS IN HERE
                         subi $t6, $t3, 2 # Subtract 2 since prime counting starts at 2
@@ -162,7 +114,7 @@ main:
                         j innerloop
                 # LOOP INSTRUCTIONS IN HERE
                 
-                continue5:
+                continue3:
                 addi $t0, $t0, 4 # Increment memory address by 4 bytes (4 bytes per integer word)
                 addi $t1, $t1, 1
                 j outerloop
@@ -181,7 +133,7 @@ main:
                         lw $t3, 0($t0) # Load boolean (prime or composite)
                         
                         # Skip printing if number is composite
-                        bne $t3, 1, continue6
+                        bne $t3, 1, continue4
                         
                         # Print number only if prime
                         move $a0, $t2
@@ -194,7 +146,7 @@ main:
                         li $v0, 4
                         syscall
                         
-                        continue6:
+                        continue4:
                         
                         addi $t0, $t0, 4 # Increment memory address
                         addi $t1, $t1, 1 # Increment loop counter
