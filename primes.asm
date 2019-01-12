@@ -95,7 +95,8 @@ main:
                 bne $t2, 1, continue3 # If the number is prime (1), then execute inner loop
                 
                 move $t3, $t1 # Copy increment value to $t3 register
-                add $t3, $t3, $t1 # Start at 2 * $t3
+                mult $t3, $t3 # Start at $t3 ^ 2
+                mflo $t3
                 
                 innerloop: # Loop through 2i, 3i, 4i, ..., not exceeding n
                         bgt $t3, $s0, continue3
