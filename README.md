@@ -9,11 +9,8 @@ To run the program, you will need the MARS IDE for programming in MIPS assembly 
 ### Running the program
 
 1. Once you have cloned this project (```git clone https://github.com/njohnson-oss/sieve-of-eratosthenes```), open the primes.asm file in the MARS IDE.
-
 2. Under MARS settings panel, check "assemble all files in directory" and "Initialize program counter to global 'main' if defined".
-
 3. Under MARS run panel, click assemble. Then click go also under the run panel.
-
 4. The program is now running. You can interact with it via the Run I/O tab at the bottom
 
 ## Authors
