@@ -1,3 +1,6 @@
+# By whitehat101 on Stackoverflow: https://stackoverflow.com/questions/17868029/finding-square-root-of-an-integer-on-mips-assembly/19306324#19306324
+# License: CC BY-SA 3.0
+
 .globl isqrt
 
 isqrt:

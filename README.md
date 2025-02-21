@@ -19,8 +19,4 @@ Nicholas Johnson
 
 ## License
 
-This project is licensed under the GPLv3 License. See the LICENSE file for details.
-
-## Acknowledgements
-
-* Program code for the sqrt.asm file provided by whitehat101 from stackoverflow. Link: https://stackoverflow.com/questions/17868029/finding-square-root-of-an-integer-on-mips-assembly/19306324#19306324
+primes.asm is licensed under the GPLv3. sqrt.asm is licensed under CC BY-SA 3.0.
