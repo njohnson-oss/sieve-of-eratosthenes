@@ -19,4 +19,4 @@ Nicholas Johnson
 
 ## License
 
-primes.asm is licensed under the GPLv3. sqrt.asm is licensed under CC BY-SA 3.0.
+[primes.asm](primes.asm) is licensed under the [GPLv3](licenses/GPLv3.txt). [sqrt.asm](sqrt.asm) is licensed under [CC BY-SA 3.0](licenses/CC%20BY-SA%203.0.txt).
